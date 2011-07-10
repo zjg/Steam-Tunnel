@@ -1,5 +1,7 @@
 
-class Card(object):
+from PyQt4 import QtCore
+
+class Card(QtCore.QObject):
     """
     
     Connections are numbered clockwise from the top of a vertical card:
@@ -10,10 +12,14 @@ class Card(object):
     Initially, all connections are a simple dead end.
     
     """
+    
     INVALID = [-1]
     DEAD_END = [-100]
     
+    connectionsChanged = QtCore.pyqtSignal()
+    
     def __init__(self):
+        super(Card, self).__init__()
         self.connections = [self.DEAD_END] * 6
     
     def connectEndpoints(self, endpoint_list):
@@ -22,6 +28,7 @@ class Card(object):
             new_list = endpoint_list[:]
             new_list.remove(endpoint)
             self.connections[endpoint] = new_list
+        self.connectionsChanged.emit()
 
     def flip(self):
         endpoint_mapping = [3, 4, 5, 0, 1, 2]
@@ -34,8 +41,10 @@ class Card(object):
         # change all the endpoint values to match the flipped values
         for connection in new_connections:
             for i in range(len(connection)):
-                connection[i] = endpoint_mapping[connection[i]]
+                if connection[i] >= 0:
+                    connection[i] = endpoint_mapping[connection[i]]
         
         self.connections = new_connections
+        self.connectionsChanged.emit()
 
 
