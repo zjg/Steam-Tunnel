@@ -1,7 +1,7 @@
 
 import unittest
 
-from tunnel_cards import Card
+from cards import Card
 
 class TestCard(unittest.TestCase):
     def setUp(self):
@@ -39,14 +39,14 @@ class TestCard(unittest.TestCase):
         """ When a non-straight connection is made, all involved endpoints point to all other involved endpoints """
         # arrange
         endpoints = [2, 4, 3]
-        expConnections = self.card.connections[:]
-        expConnections[2] = [3, 4]
-        expConnections[3] = [2, 4]
-        expConnections[4] = [2, 3]
+        exp_connections = self.card.connections[:]
+        exp_connections[2] = [3, 4]
+        exp_connections[3] = [2, 4]
+        exp_connections[4] = [2, 3]
         # act
         self.card.connectEndpoints(endpoints)
         # assert
-        self.assertEqual(self.card.connections, expConnections)
+        self.assertEqual(self.card.connections, exp_connections)
     
     def test_flip_emits_signal(self):
         # arrange
@@ -59,11 +59,22 @@ class TestCard(unittest.TestCase):
         """ When a card is flipped, connections are maintained correctly """
         # arrange
         self.card.connections = [[4], [5], [3], [2], [0], [1]]
-        expConnections = [[5], [3], [4], [1], [2], [0]]
+        exp_connections = [[5], [3], [4], [1], [2], [0]]
         # act
         self.card.flip()
         # assert
-        self.assertEqual(self.card.connections, expConnections)
+        self.assertEqual(self.card.connections, exp_connections)
+    
+    def test_getConnectedEndpoints(self):
+        """ getConnectedEndpoints() should return a list of endpoint groupings """
+        # arrange
+        exp_endpoint_connections = [ [0, 1], [3, 4, 5] ]
+        for connection in exp_endpoint_connections:
+            self.card.connectEndpoints(connection)
+        # act
+        endpoint_connections = self.card.getConnectedEndpoints()
+        # assert
+        self.assertEqual(endpoint_connections, exp_endpoint_connections)
     
 if __name__ == '__main__':
     unittest.main()
