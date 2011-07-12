@@ -18,9 +18,12 @@ class Card(QtCore.QObject):
     
     connectionsChanged = QtCore.pyqtSignal()
     
-    def __init__(self):
+    def __init__(self, endpoint_connections = None):
         super(Card, self).__init__()
         self.connections = [self.DEAD_END] * 6
+        
+        if endpoint_connections is not None:
+            for e in endpoint_connections: self.connectEndpoints(e)
     
     def connectEndpoints(self, endpoint_list):
         """ Connect the endpoints given in endpoint_list """

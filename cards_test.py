@@ -17,7 +17,17 @@ class TestCard(unittest.TestCase):
         for i in range(6):
             self.assertEqual(self.card.connections[i], Card.DEAD_END)
     
+    def test_constructor_with_endpoint_list(self):
+        """ You can pass in a list of endpoint connections to the constructor """
+        # arrange
+        endpoint_connections = [ [0, 1], [3, 4, 5] ]
+        # act
+        self.card = Card(endpoint_connections)
+        # assert
+        self.assertEqual(self.card.getConnectedEndpoints(), endpoint_connections)
+    
     def test_connectEndpoints_emits_signal(self):
+        """ connectionsChanged signal should be emitted every time connectEndpoints() is called """
         # arrange
         # act
         self.card.connectEndpoints([0])
@@ -49,6 +59,7 @@ class TestCard(unittest.TestCase):
         self.assertEqual(self.card.connections, exp_connections)
     
     def test_flip_emits_signal(self):
+        """ connectionsChanged signal should be emitted every time flip() is called """
         # arrange
         # act
         self.card.flip()
