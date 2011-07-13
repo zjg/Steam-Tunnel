@@ -76,3 +76,13 @@ class PointCard(Card):
     def __init__(self):
         super(PointCard, self).__init__()
         self.point_values = [ 4, 3, 2, 4, 3, 2 ]
+
+class FaceDownCard(Card):
+    """
+    Represents a face down card.
+    """
+    
+    def __init__(self):
+        super(FaceDownCard, self).__init__([ [0,3], [1,5], [2,4] ])
+
+

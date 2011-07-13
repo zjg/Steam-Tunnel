@@ -1,7 +1,7 @@
 
 import unittest
 
-from cards import Card, PointCard
+from cards import Card, PointCard, FaceDownCard
 
 class TestCard(unittest.TestCase):
     def setUp(self):
@@ -87,7 +87,6 @@ class TestCard(unittest.TestCase):
         endpoint_connections = self.card.getConnectedEndpoints()
         # assert
         self.assertEqual(endpoint_connections, exp_endpoint_connections)
-    
 
 class TestPointCard(unittest.TestCase):
     def setUp(self):
@@ -102,6 +101,15 @@ class TestPointCard(unittest.TestCase):
         """ Ensure all the point values are set correctly """
         values = [ 4, 3, 2, 4, 3, 2 ]
         self.assertEqual(self.card.point_values, values)
+
+class TestFaceDownCard(unittest.TestCase):
+    def setUp(self):
+        self.card = FaceDownCard()
+    
+    def test_all_connections_are_straight_through(self):
+        """ All connections should be straight through to the other side of the card """
+        exp_connections = [ [0,3], [1,5], [2,4] ]
+        self.assertEqual(self.card.getConnectedEndpoints(), exp_connections)
 
 if __name__ == '__main__':
     unittest.main()
