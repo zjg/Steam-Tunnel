@@ -1,3 +1,4 @@
+#!/usr/bin/python
 
 import unittest
 
@@ -87,7 +88,47 @@ class TestCard(unittest.TestCase):
         endpoint_connections = self.card.getConnectedEndpoints()
         # assert
         self.assertEqual(endpoint_connections, exp_endpoint_connections)
-
+    
+    def test_eq_with_non_card_object(self):
+        """ Ensure that the equality operator returns false for non-card objects """
+        # arrange
+        non_card = 3
+        # act
+        equal = (self.card == non_card)
+        # assert
+        self.assertFalse(equal)
+    
+    def test_eq_with_identical_cards(self):
+        """ Ensure that cards which are the same evaluate as equal """
+        # arrange
+        endpoints = [ [0, 1], [2, 5] ]
+        self.card = Card(endpoints)
+        card2 = Card(endpoints)
+        # act
+        equal = (self.card == card2)
+        # assert
+        self.assertTrue(equal)
+    
+    def test_ne_with_non_card_object(self):
+        """ Ensure that the inequality operator returns true for non-card objects """
+        # arrange
+        non_card = 3
+        # act
+        not_equal = (self.card != non_card)
+        # assert
+        self.assertTrue(not_equal)
+    
+    def test_ne_with_identical_cards(self):
+        """ Ensure that cards which are the same evaluate as equal """
+        # arrange
+        endpoints = [ [0, 1], [2, 5] ]
+        self.card = Card(endpoints)
+        card2 = Card(endpoints)
+        # act
+        not_equal = (self.card != card2)
+        # assert
+        self.assertFalse(not_equal)
+    
 class TestPointCard(unittest.TestCase):
     def setUp(self):
         self.card = PointCard()

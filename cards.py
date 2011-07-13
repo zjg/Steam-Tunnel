@@ -67,6 +67,22 @@ class Card(QtCore.QObject):
         
         return groups
 
+    def __eq__(self, other):
+        """ Two cards are considered equal if their endpoint connections are equivalent """
+        return (type(other) == type(self) and
+                self.getConnectedEndpoints() == other.getConnectedEndpoints())
+    
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+
+class FakeCard(Card):
+    def __init__(self):
+        super(FakeCard, self).__init__()
+        self.flip_called = False
+    def flip(self):
+        self.flip_called = True
+
 
 class PointCard(Card):
     """
