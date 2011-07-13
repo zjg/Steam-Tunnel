@@ -82,6 +82,8 @@ class FakeCard(Card):
         self.flip_called = False
     def flip(self):
         self.flip_called = True
+    def __eq__(self, other):
+        return (self is other)
 
 
 class PointCard(Card):
