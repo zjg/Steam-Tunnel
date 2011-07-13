@@ -1,7 +1,7 @@
 
 import unittest
 
-from cards import Card
+from cards import Card, PointCard
 
 class TestCard(unittest.TestCase):
     def setUp(self):
@@ -13,9 +13,10 @@ class TestCard(unittest.TestCase):
         self.card.connectionsChanged.connect(connectionsChanged_spy)
     
     def test_defaults(self):
-        """ The card initially consists of dead ends """
+        """ The card initially consists of dead ends with no point value """
         for i in range(6):
             self.assertEqual(self.card.connections[i], Card.DEAD_END)
+            self.assertEqual(self.card.point_values[i], 0)
     
     def test_constructor_with_endpoint_list(self):
         """ You can pass in a list of endpoint connections to the constructor """
@@ -87,5 +88,20 @@ class TestCard(unittest.TestCase):
         # assert
         self.assertEqual(endpoint_connections, exp_endpoint_connections)
     
+
+class TestPointCard(unittest.TestCase):
+    def setUp(self):
+        self.card = PointCard()
+    
+    def test_all_connections_are_dead_ends(self):
+        """ All connections should be dead ends """
+        for i in range(6):
+            self.assertEqual(self.card.connections[i], Card.DEAD_END)
+    
+    def test_point_values_are_correct(self):
+        """ Ensure all the point values are set correctly """
+        values = [ 4, 3, 2, 4, 3, 2 ]
+        self.assertEqual(self.card.point_values, values)
+
 if __name__ == '__main__':
     unittest.main()

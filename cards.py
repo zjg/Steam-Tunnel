@@ -21,6 +21,7 @@ class Card(QtCore.QObject):
     def __init__(self, endpoint_connections = None):
         super(Card, self).__init__()
         self.connections = [self.DEAD_END] * 6
+        self.point_values = [0] * 6
         
         if endpoint_connections is not None:
             for e in endpoint_connections: self.connectEndpoints(e)
@@ -67,3 +68,11 @@ class Card(QtCore.QObject):
         return groups
 
 
+class PointCard(Card):
+    """
+    Represents one of the point cards.
+    """
+    
+    def __init__(self):
+        super(PointCard, self).__init__()
+        self.point_values = [ 4, 3, 2, 4, 3, 2 ]
