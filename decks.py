@@ -41,21 +41,21 @@ class DefaultDeck(Deck):
     (does not include the point cards)
     """
     
-    DEFAULT_CARDS = [
-        Card([ [1,3], [2,5] ]), Card([ [1,4], [3,5] ]),                 # crisscross with 2 dead ends
-        Card([ [0,1], [2,4], [3,5] ]), Card([ [0,5], [1,3], [2,4] ]),   # crisscross with no dead ends
-        Card([ [0,5], [1,3] ]), Card([ [0,1], [3,5] ]),                 # corners with 2 dead ends
-        Card([ [0,5], [1,4], [2,3] ]), Card([ [0,1], [2,5], [3,4] ]),   # corners with swerve in the middle
-        Card([ [0,5], [1,2], [3,4] ]),                                  # corners with a U-turn
-        Card([ [0,3], [1,5], [2,4] ]),                                  # 3 straights
-        Card([ [0,1,5], [2,3,4] ])                                      # tees
+    DEFAULT_CARD_ENDPOINTS = [
+        [ [1,3], [2,5] ], [ [1,4], [3,5] ],                 # crisscross with 2 dead ends
+        [ [0,1], [2,4], [3,5] ], [ [0,5], [1,3], [2,4] ],   # crisscross with no dead ends
+        [ [0,5], [1,3] ], [ [0,1], [3,5] ],                 # corners with 2 dead ends
+        [ [0,5], [1,4], [2,3] ], [ [0,1], [2,5], [3,4] ],   # corners with swerve in the middle
+        [ [0,5], [1,2], [3,4] ],                            # corners with a U-turn
+        [ [0,3], [1,5], [2,4] ],                            # 3 straights
+        [ [0,1,5], [2,3,4] ]                                # tees
     ]
     
     def __init__(self):
         super(DefaultDeck, self).__init__()
-        self.cards = [Card()] * 44
-
-
+        for card_endpoints in DefaultDeck.DEFAULT_CARD_ENDPOINTS:
+            for i in range(4):
+                self.cards.append(Card(card_endpoints))
 
 class FakeDeck(Deck):
     def __init__(self):

@@ -56,17 +56,19 @@ class TestDefaultDeck(unittest.TestCase):
     
     def test_deck_is_correct_size(self):
         """ Ensure the deck contains 44 cards """
-        # arrange
-        # act
-        # assert
         self.assertEqual(len(self.deck.cards), 44)
     
     def test_deck_contains_correct_cards(self):
-        """ Ensure the deck contains at least one of each default card type """
-        # arrange
-        # act
-        # assert
-        pass
+        """ Ensure the deck contains four of each default card type """
+        card_type_counts = {}
+        for card_type in DefaultDeck.DEFAULT_CARD_ENDPOINTS:
+            card_type_counts[str(card_type)] = 0
+        
+        for card in self.deck.cards:
+            card_type_counts[str(card.getConnectedEndpoints())] += 1
+        
+        for card_type in card_type_counts.keys():
+            self.assertEqual(card_type_counts[card_type], 4)
 
 if __name__ == '__main__':
     unittest.main()
