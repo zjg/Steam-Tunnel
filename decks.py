@@ -36,3 +36,13 @@ class DefaultDeck(Deck):
     def __init__(self):
         super(DefaultDeck, self).__init__()
         self.cards = [Card()] * 44
+
+
+
+class FakeDeck(Deck):
+    def __init__(self):
+        super(FakeDeck, self).__init__()
+        self.shuffle_called = False
+    
+    def shuffle(self):
+        self.shuffle_called = True
