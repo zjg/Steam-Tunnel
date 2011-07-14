@@ -1,48 +1,48 @@
 #!/usr/bin/python
 
-import unittest
+import nose
 
 from cards import PointCard, FaceDownCard
 from decks import FakeDeck
 from grid import Grid
 
-class TestGrid(unittest.TestCase):
+class TestGrid():
     def setUp(self):
         self.deck = FakeDeck()
         self.grid = Grid(self.deck)
         
+        self.cardChanged_locations = []
+        def cardChanged_spy(location):
+            self.cardChanged_locations.append(location)
+        self.grid.cardChanged.connect(cardChanged_spy)
+        
     def test_newGame_shuffles_deck(self):
-        """ Ensures a new game shuffles the deck """
-        # arrange
-        # act
         self.grid.newGame()
-        # assert
-        self.assertTrue(self.deck.shuffle_called)
+        assert (self.deck.shuffle_called)
     
     def test_newGame_sets_point_cards(self):
-        """ Ensures a new game has the point cards set correctly """
-        # arrange
-        # act
-        self.grid.newGame()
-        # assert
         for location in Grid.POINT_CARD_LOCATIONS:
-            card = self.grid.card(location)
-            self.assertTrue(isinstance(card, PointCard))
+            yield (self.check_newGame_sets_point_cards, location)
+    def check_newGame_sets_point_cards(self, location):
+        self.grid.newGame()
+        card = self.grid.card(location)
+        assert (isinstance(card, PointCard))
     
     def test_newGame_sets_face_down_cards(self):
-        """ Ensures a new game has all non-point cards face-down """
-        # arrange
-        # act
+        for location in Grid.allGridLocations():
+            if location not in Grid.POINT_CARD_LOCATIONS:
+                yield (self.check_newGame_sets_face_down_cards, location)
+    def check_newGame_sets_face_down_cards(self, location):
         self.grid.newGame()
-        # assert
-        for i in range(Grid.GRID_SIZE):
-            for j in range(Grid.GRID_SIZE):
-                location = (i,j)
-                if location not in Grid.POINT_CARD_LOCATIONS:
-                    card = self.grid.card(location)
-                    self.assertTrue(isinstance(card, FaceDownCard))
+        card = self.grid.card(location)
+        assert (isinstance(card, FaceDownCard))
+    
+    def test_newGame_emits_cardChanged_signal_for_each_location(self):
+        self.grid.newGame()
+        for location in Grid.allGridLocations():
+            assert (location in self.cardChanged_locations)
     
     # def test_nextCard
     
 if __name__ == '__main__':
-    unittest.main()
+    nose.main()
