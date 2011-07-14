@@ -4,6 +4,10 @@ from PyQt4 import QtCore
 from decks import Deck
 from cards import PointCard, FaceDownCard
 
+class CardAlreadyFaceUpException(Exception):
+    """ Exception raised when an attempt is made to turn a card face up that is already face up """
+    pass
+
 class Grid(QtCore.QObject):
     """
     """
@@ -31,6 +35,13 @@ class Grid(QtCore.QObject):
     def nextCard(self, location, exit_endpoint):
         """ Return the Card instance that is reached by leaving from exit_endpoint of the Card at location """
         return None
+    
+    def turnCardFaceUp(self, location):
+        """ Turns the card at location face up.  If it is already face up, throw an exception """
+        if not isinstance(self.grid[location], FaceDownCard):
+            raise CardAlreadyFaceUpException
+        self.grid[location] = self.deck.nextCard()
+        self.cardChanged.emit(location)
     
     @staticmethod
     def allGridLocations():

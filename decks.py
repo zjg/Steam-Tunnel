@@ -4,7 +4,7 @@ import copy
 
 from PyQt4 import QtCore
 
-from cards import Card
+from cards import Card, FakeCard
 
 class DeckEmptyException(Exception):
     """ Exception thrown when an attempt is made to get the next card from an empty deck """
@@ -61,6 +61,11 @@ class FakeDeck(Deck):
     def __init__(self):
         super(FakeDeck, self).__init__()
         self.shuffle_called = False
+        self.next_cards = []
     
     def shuffle(self):
         self.shuffle_called = True
+    
+    def nextCard(self):
+        self.next_cards.append(FakeCard())
+        return self.next_cards[-1]
