@@ -32,18 +32,35 @@ class CardWidget(QtGui.QWidget):
         painter.end()
     
     def resizeEvent(self, event):
-        self.updateEndpointCoordinates()
+        self._updateEndpointCoordinates()
     
-    def updateEndpointCoordinates(self):
+    def _updateEndpointCoordinates(self):
         size = self.size()
         width = size.width()
         height = size.height()
         half_height = height / 2
         third_width = width / 3
         
-        self.endpoint_coords[0] = (width, half_height)
-        self.endpoint_coords[1] = (2 * third_width, height)
-        self.endpoint_coords[2] = (third_width, height)
-        self.endpoint_coords[3] = (0, half_height)
-        self.endpoint_coords[4] = (third_width, 0)
-        self.endpoint_coords[5] = (2 * third_width, 0)
+        self.endpoint_coords = [(width, half_height), (2 * third_width, height),
+                                (third_width, height), (0, half_height),
+                                (third_width, 0), (2 * third_width, 0)
+                               ]
+
+class GridWidget(QtGui.QWidget):
+    def __init__(self, parent):
+        super(GridWidget, self).__init__(parent)
+        self.grid = None
+        self.card_widgets = {}
+        self.layout = None
+    
+    def setGrid(self, grid):
+        self.grid = grid
+        self._updateWidgets()
+    
+    def _updateWidgets(self):
+        self.layout = QtGui.QGridLayout(self)
+        for location in self.grid.allGridLocations():
+            card_widget = CardWidget(self)
+            card_widget.setCard(self.grid.card(location))
+            self.card_widgets[location] = card_widget
+            self.layout.addWidget(card_widget, location[1], location[0])

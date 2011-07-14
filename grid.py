@@ -11,6 +11,8 @@ class Grid(QtCore.QObject):
     GRID_SIZE = 6
     POINT_CARD_LOCATIONS = [ (1,1), (4,4), (4,1), (1,4) ]
     
+    # todo : signal for when a location's card has changed
+    
     def __init__(self, deck):
         super(Grid, self).__init__()
         self.deck = deck
@@ -30,9 +32,15 @@ class Grid(QtCore.QObject):
         """ Return the Card instance that is reached by leaving from exit_endpoint of the Card at location """
         return None
     
+    def allGridLocations(self):
+        for i in range(Grid.GRID_SIZE):
+            for j in range(Grid.GRID_SIZE):
+                yield (i,j)
+        return
+    
     def _blankGrid(self):
         blank_grid = {}
-        for location in self._allGridLocations():
+        for location in self.allGridLocations():
             blank_grid[location] = None
         return blank_grid
     
@@ -41,13 +49,7 @@ class Grid(QtCore.QObject):
             self.grid[location] = PointCard()
     
     def _setFaceDownCards(self):
-        for location in self._allGridLocations():
+        for location in self.allGridLocations():
             self.grid[location] = FaceDownCard()
-    
-    def _allGridLocations(self):
-        for i in range(Grid.GRID_SIZE):
-            for j in range(Grid.GRID_SIZE):
-                yield (i,j)
-        return
     
 
